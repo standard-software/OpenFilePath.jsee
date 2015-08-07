@@ -1,0 +1,94 @@
+/*------------------------------------------------------------
+ファイルパスを開く.jsee
+
+行選択して、含まれているパスのファイルを開く
+------------------------------------------------------------*/
+
+//--------------------------------------------------
+//include st.js
+//--------------------------------------------------
+var includeFileName = ".\\Macro\\MyMacros\\OpenFilePath\\lib\\st.js"
+//--------------------------------------------------
+var fso = new ActiveXObject("Scripting.FileSystemObject")
+eval( 
+    fso.OpenTextFile(
+        fso.GetParentFolderName(Editor.FullName) + 
+        includeFileName, 1)
+    .ReadAll() );
+//--------------------------------------------------
+
+main();
+
+function main() {
+    wshell = new ActiveXObject("WScript.Shell");
+
+    //alert ( document.selection.text );
+    //動作確認
+
+
+    //行選択コマンド
+    if (document.selection.IsEmpty) {
+        document.selection.SelectLine();
+    };
+
+    //文字列取得
+    var str = document.selection.text;
+
+    //改行コード削除
+    str = replaceAll(str, "\r", "\t");
+    str = replaceAll(str, "\n", "\t");
+
+    //ダブルクウォートが奇数個なら偶数個にする
+    if (strCount(str, "\"") % 2 !== 0) {
+        str = includeLastStr(str, "\"")
+    }
+    //alert(str)
+
+    var output = "";
+
+    //ダブルクウォートで囲まれていないスペースはタブにする
+    //status 0 = 本文
+    //status 1 = ダブルクウォートで囲まれた文字
+    var status = 0;
+    for (var i = 0; i <= str.length; i++) {
+        if (str.charAt(i) === "\"") {
+            switch (status) {
+            case 0:
+                status = 1;
+                break;
+            case 1:
+                status = 0;
+                break;
+            }
+            output += str.charAt(i);
+        } else {
+            switch (status) {
+            case 0:
+                if (str.charAt(i) === " ") {
+                    output += "\t";
+                } else {
+                    output += str.charAt(i);
+                }
+                break;
+            case 1:
+                output += str.charAt(i);
+                break;
+            }
+        }
+    }
+    str = output;
+    //テスト"   ABC   DEF   "テスト   ABC   DEF   "123 456" テスト
+
+    var strArray = str.split("\t");
+    //var s;
+    for (var i = 0 ; i <= strArray.length - 1 ; i++){
+        if (strArray[i] === "") continue;
+
+        var fileName = trimBothEndsStrs(strArray[i], ["\""]);
+        //alert(fileName);
+        if (fso.FileExists( fileName )) {
+            //ファイル開く
+            shellFileOpen(fileName, 1)
+        }
+    }
+}
