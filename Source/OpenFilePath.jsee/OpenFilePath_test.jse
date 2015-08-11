@@ -1,0 +1,41 @@
+/*------------------------------------------------------------
+ファイルパスを開く.jsee
+
+行選択して、テキストに含まれているパスのファイルを開く
+------------------------------------------------------------*/
+
+//--------------------------------------------------
+//include st.js
+//--------------------------------------------------
+var fso = new ActiveXObject("Scripting.FileSystemObject")
+//--------------------------------------------------
+var basePath = fso.GetParentFolderName(WScript.ScriptFullName);
+var includeFileName = ".\\lib\\st.js"
+//--------------------------------------------------
+eval( 
+    fso.OpenTextFile(
+        fso.BuildPath(basePath, includeFileName), 1)
+    .ReadAll() );
+//--------------------------------------------------
+
+
+//--------------------------------------------------
+var includeFileName = ".\\common\\OpenFilePath_Common.js"
+//--------------------------------------------------
+eval( 
+    fso.OpenTextFile(
+        fso.BuildPath(basePath, includeFileName), 1)
+    .ReadAll() );
+//--------------------------------------------------
+
+
+//WSH では alert が無いので関数を作成する
+function alert(messageText) {
+    WScript.Echo(messageText);
+}
+
+test_textToFileListArray(WScript.ScriptFullName);
+test();
+
+
+

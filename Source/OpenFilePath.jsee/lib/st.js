@@ -12,6 +12,10 @@ All Right Reserved:
 Version:       2015/08/02
 //----------------------------------------*/
 
+
+WshShell = new ActiveXObject( "WScript.Shell" );
+
+
 //test();
 
 function test() {
@@ -592,7 +596,8 @@ function test_getFileName() {
 function shellFileOpen(FilePath, Focus) {
     //assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellFileOpen")
 
-    wshell.Run(
+
+    WshShell.Run(
         "rundll32.exe url.dll" + 
         ",FileProtocolHandler " + FilePath 
         , Focus, false)

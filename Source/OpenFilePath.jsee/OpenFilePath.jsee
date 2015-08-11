@@ -1,0 +1,75 @@
+/*------------------------------------------------------------
+ファイルパスを開く.jsee
+
+行選択して、テキストに含まれているパスのファイルを開く
+------------------------------------------------------------*/
+
+//--------------------------------------------------
+//include st.js
+//--------------------------------------------------
+var fso = new ActiveXObject("Scripting.FileSystemObject")
+//--------------------------------------------------
+var basePath = fso.GetParentFolderName(ScriptFullName);
+var includeFileName = ".\\lib\\st.js"
+//--------------------------------------------------
+eval( 
+    fso.OpenTextFile(
+        fso.BuildPath(basePath, includeFileName), 1)
+    .ReadAll() );
+//--------------------------------------------------
+
+
+//--------------------------------------------------
+var includeFileName = ".\\common\\OpenFilePath_Common.js"
+//--------------------------------------------------
+eval( 
+    fso.OpenTextFile(
+        fso.BuildPath(basePath, includeFileName), 1)
+    .ReadAll() );
+//--------------------------------------------------
+
+/*----------------------------------------
+EmEditor Macro JavaScript では
+・  alert がある。
+・  WScript.ScriptFullName は
+    ScriptFullName として使える
+
+//Test
+alert(ScriptFullName);
+
+//----------------------------------------*/
+
+main();
+
+function main() {
+
+    var fileListArray;
+
+    //行選択コマンド
+    if (document.selection.IsEmpty) {
+        document.selection.SelectLine();
+
+        fileListArray = textToFileListArray(document.selection.text);
+    } else {
+        fileListArray = textToFileListArray(document.selection.text);
+        if (fileListArray.length === 0) {
+            document.selection.SelectLine();
+            fileListArray = textToFileListArray(document.selection.text);
+        }
+    }
+
+    //alert(arrayToString(fileListArray));
+
+    if (fileListArray.length !== 0) {
+
+        for (var i = 0 ; i <= fileListArray.length - 1 ; i++){
+            var fileName = fileListArray[i];
+            //alert(fileName);
+            if (fso.FileExists( fileName )) {
+                //ファイル開く
+                shellFileOpen(fileName, 1)
+            }
+        }
+
+    }
+}

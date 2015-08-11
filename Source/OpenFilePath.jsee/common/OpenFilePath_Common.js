@@ -1,38 +1,9 @@
 /*------------------------------------------------------------
-ファイルパスを開く.jsee
-
-行選択して、含まれているパスのファイルを開く
+OpenFiilePath.js
 ------------------------------------------------------------*/
 
-//--------------------------------------------------
-//include st.js
-//--------------------------------------------------
-var includeFileName = ".\\Macro\\MyMacros\\OpenFilePath\\lib\\st.js"
-//--------------------------------------------------
-var fso = new ActiveXObject("Scripting.FileSystemObject")
-eval( 
-    fso.OpenTextFile(
-        fso.GetParentFolderName(Editor.FullName) + 
-        includeFileName, 1)
-    .ReadAll() );
-//--------------------------------------------------
-
-main();
-
-function main() {
-    wshell = new ActiveXObject("WScript.Shell");
-
-    //alert ( document.selection.text );
-    //動作確認
-
-
-    //行選択コマンド
-    if (document.selection.IsEmpty) {
-        document.selection.SelectLine();
-    };
-
-    //文字列取得
-    var str = document.selection.text;
+//文字列から存在するファイルパスを抽出する関数
+function textToFileListArray(str) {
 
     //改行コード削除
     str = replaceAll(str, "\r", "\t");
@@ -42,13 +13,11 @@ function main() {
     if (strCount(str, "\"") % 2 !== 0) {
         str = includeLastStr(str, "\"")
     }
-    //alert(str)
-
-    var output = "";
 
     //ダブルクウォートで囲まれていないスペースはタブにする
     //status 0 = 本文
     //status 1 = ダブルクウォートで囲まれた文字
+    var output = "";
     var status = 0;
     for (var i = 0; i <= str.length; i++) {
         if (str.charAt(i) === "\"") {
@@ -79,16 +48,27 @@ function main() {
     str = output;
     //テスト"   ABC   DEF   "テスト   ABC   DEF   "123 456" テスト
 
-    var strArray = str.split("\t");
-    //var s;
-    for (var i = 0 ; i <= strArray.length - 1 ; i++){
-        if (strArray[i] === "") continue;
+    //ダブルクウォートをタブ文字にする
+    str = replaceAll(str, "\"", "\t");
 
-        var fileName = trimBothEndsStrs(strArray[i], ["\""]);
-        //alert(fileName);
-        if (fso.FileExists( fileName )) {
-            //ファイル開く
-            shellFileOpen(fileName, 1)
+    //alert(str);
+
+    var strArray = str.split("\t");
+    for (var i = strArray.length - 1 ; i >= 0 ; i--){
+        //alert(i.toString() + " " + strArray[i] + " " + fso.FileExists( strArray[i] ));
+        if (fso.FileExists( strArray[i] ) === false) {
+            //ファイルが存在しないなら配列の一番最後の要素を削除
+            strArray.splice(i, 1);
         }
     }
+    //alert("test01 " + arrayToString(strArray));
+    return strArray;
+}
+
+//存在するpathを渡すとテストがOKになる
+function test_textToFileListArray(path) {
+    check(path, arrayToString(textToFileListArray(" "+ path + "\t")));
+    check(path+"/"+path, 
+        arrayToString(textToFileListArray(" "+ path + "\t"+ path), "/"));
+    alert("test_textToFileListArray");
 }
