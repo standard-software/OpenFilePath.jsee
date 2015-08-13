@@ -1,7 +1,7 @@
 /*----------------------------------------
-st_js
+st.js
 --------------------------------------
-ModuleName:    Base Module
+ModuleName:    Core Module
 FileName:      st.js
 --------------------------------------
 License:       MIT License
@@ -9,7 +9,7 @@ All Right Reserved:
    Name:       Standard Software
    URL:        http://standard-software.net/
 --------------------------------------
-Version:       2015/08/02
+Version:       2015/08/13
 //----------------------------------------*/
 
 
@@ -29,11 +29,15 @@ function test() {
     test_isLastStr();
     test_includeLastStr();
     test_excludeLastStr();
+
+    test_firstStrFirstDelim();
+    test_firstStrLastDelim();
+    test_lastStrFirstDelim();
+    test_lastStrLastDelim();
+
     test_trimFirstStrs();
     test_trimLastStrs();
 
-    test_firstStrFirstDelim();
-    test_lastStrFirstDelim();
     test_replaceAll();
 
     test_arrayToString();
@@ -278,6 +282,100 @@ function ExcludeBothEndsText(str, subStr) {
     return excludeFirstText(excludeLastText(str, subStr), subStr);
 }
 
+//----------------------------------------
+//◇First / Last Delim
+//----------------------------------------
+
+//--------------------------------------
+//FirstStrFirstDelim
+//--------------------------------------
+function firstStrFirstDelim(value, delimiter) {
+    var result = "";
+    var index = value.indexOf(delimiter);
+    if (index !== -1) {
+        result = value.substring(0, index);
+    }
+    return result;
+}
+
+function test_firstStrFirstDelim() {
+    check("123", firstStrFirstDelim("123,456", ","));
+    check("123", firstStrFirstDelim("123,456,789", ","));
+    check("123", firstStrFirstDelim("123ttt456", "ttt"));
+    check("123", firstStrFirstDelim("123ttt456", "tt"));
+    check("123", firstStrFirstDelim("123ttt456", "t"));
+    check("", firstStrFirstDelim("123ttt456", ","));
+    //alert("finish test_firstStrFirstDelim");
+}
+
+//----------------------------------------
+//・FirstStrLastDelim
+//----------------------------------------
+function firstStrLastDelim(value, delimiter) {
+    var result = "";
+    var index = value.lastIndexOf(delimiter);
+    if (index !== -1) {
+        result = value.substring(0, index);
+    }
+    return result;
+}
+
+function test_firstStrLastDelim() {
+    check("123", firstStrLastDelim("123,456", ","));
+    check("123,456", firstStrLastDelim("123,456,789", ","));
+    check("123", firstStrLastDelim("123ttt456", "ttt"));
+    check("123t", firstStrLastDelim("123ttt456", "tt"));
+    check("123tt", firstStrLastDelim("123ttt456", "t"));
+    check("", firstStrLastDelim("123ttt456", ","));
+    //alert("finish test_firstStrLastDelim");
+}
+
+
+//---------------------------------------s-
+//・LastStrFirstDelim
+//----------------------------------------
+function lastStrFirstDelim(value, delimiter) {
+    var result = "";
+    var index = value.indexOf(delimiter);
+    if (index !== -1) {
+        result = value.slice(index + delimiter.length);
+    }
+    return result;
+}
+
+function test_lastStrFirstDelim() {
+    check("456", lastStrFirstDelim("123,456", ","));
+    check("456,789", lastStrFirstDelim("123,456,789", ","));
+    check("456", lastStrFirstDelim("123ttt456", "ttt"));
+    check("t456", lastStrFirstDelim("123ttt456", "tt"));
+    check("tt456", lastStrFirstDelim("123ttt456", "t"));
+    check("", lastStrFirstDelim("123ttt456", ","));
+    //alert("finish test_lastStrFirstDelim");
+}
+
+
+//----------------------------------------
+//・LastStrLastDelim
+//----------------------------------------
+function lastStrLastDelim(value, delimiter) {
+    var result = "";
+    var index = value.lastIndexOf(delimiter);
+    if (index !== -1) {
+        result = value.slice(index + delimiter.length);
+    }
+    return result;
+}
+
+function test_lastStrLastDelim() {
+    check("456", lastStrLastDelim("123,456", ","));
+    check("789", lastStrLastDelim("123,456,789", ","));
+    check("456", lastStrLastDelim("123ttt456", "ttt"));
+    check("456", lastStrLastDelim("123ttt456", "tt"));
+    check("456", lastStrLastDelim("123ttt456", "t"));
+    check("", lastStrLastDelim("123ttt456", ","));
+    //alert("finish test_lastStrLastDelim");
+}
+
 
 //--------------------------------------
 //◇Trim
@@ -324,47 +422,6 @@ function trimBothEndsStrs(str, trimStrArray) {
 
 
 
-//--------------------------------------
-//FirstStrFirstDelim
-//--------------------------------------
-function firstStrFirstDelim(value, delimiter) {
-    var result = "";
-    var index = value.indexOf(delimiter);
-    if (index !== -1) {
-        result = value.substring(0, index);
-    }
-    return result;
-}
-
-function test_firstStrFirstDelim() {
-    check("123", firstStrFirstDelim("123,456", ","));
-    check("123", firstStrFirstDelim("123,456,789", ","));
-    check("123", firstStrFirstDelim("123ttt456", "ttt"));
-    check("123", firstStrFirstDelim("123ttt456", "tt"));
-    check("123", firstStrFirstDelim("123ttt456", "t"));
-    check("", firstStrFirstDelim("123ttt456", ","));
-}
-
-//----------------------------------------
-//・LastStrFirstDelim
-//----------------------------------------
-function lastStrFirstDelim(value, delimiter) {
-    var result = "";
-    var index = value.indexOf(delimiter);
-    if (index !== -1) {
-        result = value.substring(index + delimiter.length, value.length);
-    }
-    return result;
-}
-
-function test_lastStrFirstDelim() {
-    check("456", lastStrFirstDelim("123,456", ","));
-    check("456,789", lastStrFirstDelim("123,456,789", ","));
-    check("456", lastStrFirstDelim("123ttt456", "ttt"));
-    check("t456", lastStrFirstDelim("123ttt456", "tt"));
-    check("tt456", lastStrFirstDelim("123ttt456", "t"));
-    check("", lastStrFirstDelim("123ttt456", ","));
-}
 
 //----------------------------------------
 //・replaceAll
@@ -575,11 +632,27 @@ function test_stringToArray(){
 
 //----------------------------------------*/
 
+//----------------------------------------
+//◆ファイルフォルダパス処理
+//----------------------------------------
 function getFileName(fileName) {
     return fileName.substring(fileName.lastIndexOf("/")+1,fileName.length);
 }
 function test_getFileName() {
     check("a.txt", getFileName("file://test/test/a.txt"));
+}
+
+
+
+//----------------------------------------
+//・終端にパス区切りを追加する関数
+//----------------------------------------
+function includeLastPathDelim(path) {
+    var result = "";
+    if (path != "") {
+        result = includeLastStr(path, "\\");
+    };
+    return result;
 }
 
 
@@ -656,4 +729,10 @@ function shellFileOpen(FilePath, Focus) {
     trimBothEndsStrs
     strCount
     shellFileOpen
+◇  ver 2015/08/12
+・  追加
+    WshShellを定義
+◇  ver 2015/08/13
+・  追加
+    firstStrLastDelim/lastStrLastDelim
 //----------------------------------------*/

@@ -59,18 +59,46 @@ function textToFileListArray(str) {
     for (var i = strArray.length - 1 ; i >= 0 ; i--){
         //alert(i.toString() + " " + strArray[i] + " " + fso.FileExists( strArray[i] ));
         if (fso.FileExists( strArray[i] ) === false) {
-            //ファイルが存在しないなら配列の一番最後の要素を削除
-            strArray.splice(i, 1);
+            if (fso.FolderExists( strArray[i] ) === false ) {
+                if (fso.FolderExists( firstStrLastDelim( strArray[i], "\\" ) ) === false) {
+                    //選択範囲が"C:\test\test\tes"の場合、存在するフォルダを開く
+
+                    //条件に一致しないときは配列の要素を削除
+                    strArray.splice(i, 1);
+                } else {
+                    strArray[i] = firstStrLastDelim( strArray[i], "\\" );
+                }
+            }
         }
     }
-    //alert("test01 " + arrayToString(strArray));
+    //alert("textToFileListArray01:" + arrayToString(strArray, "/"));
     return strArray;
 }
 
 //存在するpathを渡すとテストがOKになる
 function test_textToFileListArray(path) {
+    //ファイルのテスト
     check(path, arrayToString(textToFileListArray(" "+ path + "\t")));
+    //alert("test01");
     check(path+"/"+path, 
         arrayToString(textToFileListArray(" "+ path + "\t"+ path), "/"));
+    //alert("test02");
+
+    //フォルダのテスト
+    path = fso.GetParentFolderName(path);
+    check(path, arrayToString(textToFileListArray(" "+ path + "\t")));
+    //alert("test03");
+    check(path+"/"+path, 
+        arrayToString(textToFileListArray(" "+ path + "\t"+ path), "/"));
+    //alert("test04");
+
+    //存在しないファイル名の親フォルダのテスト
+    path = includeLastPathDelim(path) + "testtest.txt";
+    check(fso.GetParentFolderName(path), arrayToString(textToFileListArray(" "+ path + "\t")));
+    //alert("test05");
+    check(fso.GetParentFolderName(path)+"/"+fso.GetParentFolderName(path), 
+        arrayToString(textToFileListArray(" "+ path + "\t"+ path), "/"));
+    //alert("test06");
+
     alert("test_textToFileListArray");
 }

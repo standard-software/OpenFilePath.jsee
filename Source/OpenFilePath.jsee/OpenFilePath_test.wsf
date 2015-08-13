@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="shift-jis" ?>
+<job>
+    <script language="JavaScript" src=".\lib\st.js"></script>
+    <script language="JavaScript" src=".\common\OpenFilePath_Common.js"></script>
+
+    <script language="JavaScript">
+
+/*----------------------------------------
+ModuleName:    OpenFilePath Test Module
+FileName:      OpenFilePath_test.wsf
+               WSH JSE File
+//----------------------------------------*/
+
+//WSH では alert が無いので関数を作成する
+function alert(messageText) {
+    WScript.Echo(messageText);
+}
+
+var fso = new ActiveXObject("Scripting.FileSystemObject")
+
+
+
+test_textToFileListArray(WScript.ScriptFullName);
+test();
+
+
+    </script>
+</job>
