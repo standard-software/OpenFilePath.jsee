@@ -1,39 +1,50 @@
 /*------------------------------------------------------------
-OpenFilePath_test.jse
-----------
-OpenFilePath Test Module
-WSH JSE File
-------------------------------------------------------------*/
+OpenFilePath
+----------------------------------------
+ModuleName:     OpenFilePath Test Module
+FileName:       OpenFilePath_test.jse
+                WSH JSE File
+----------------------------------------
+All Right Reserved:
+   Name:        Standard Software
+   URL:         http://standard-software.net/
+--------------------------------------
+Version:        2015/08/13
+// ------------------------------------------------------------*/
 
-//--------------------------------------------------
+
+//----------------------------------------
 //include st.js
-//--------------------------------------------------
+//--------------------
 var fso = new ActiveXObject("Scripting.FileSystemObject")
-//--------------------------------------------------
+//--------------------
 var basePath = fso.GetParentFolderName(WScript.ScriptFullName);
 var includeFileName = ".\\lib\\st.js"
-//--------------------------------------------------
+//--------------------
 eval( 
     fso.OpenTextFile(
         fso.BuildPath(basePath, includeFileName), 1)
     .ReadAll() );
-//--------------------------------------------------
+//----------------------------------------
 
 
-//--------------------------------------------------
+//----------------------------------------
+//OpenFilePath_Common.js
+//--------------------
 var includeFileName = ".\\common\\OpenFilePath_Common.js"
-//--------------------------------------------------
+//--------------------
 eval( 
     fso.OpenTextFile(
         fso.BuildPath(basePath, includeFileName), 1)
     .ReadAll() );
-//--------------------------------------------------
+//----------------------------------------
 
-
+//----------------------------------------
 //WSH Ç≈ÇÕ alert Ç™ñ≥Ç¢ÇÃÇ≈ä÷êîÇçÏê¨Ç∑ÇÈ
 function alert(messageText) {
     WScript.Echo(messageText);
 }
+//----------------------------------------
 
 test_textToFileListArray(WScript.ScriptFullName);
 test();

@@ -5,24 +5,34 @@
 
     <script language="JavaScript">
 
-/*----------------------------------------
-ModuleName:    OpenFilePath Test Module
-FileName:      OpenFilePath_test.wsf
-               WSH JSE File
-//----------------------------------------*/
+/*------------------------------------------------------------
+OpenFilePath
+----------------------------------------
+ModuleName:     OpenFilePath Test Module
+FileName:       OpenFilePath_test.wsf
+                WSH WSF File
+----------------------------------------
+All Right Reserved:
+   Name:        Standard Software
+   URL:         http://standard-software.net/
+--------------------------------------
+Version:        2015/08/13
+// ------------------------------------------------------------*/
 
+//----------------------------------------
 //WSH Ç≈ÇÕ alert Ç™ñ≥Ç¢ÇÃÇ≈ä÷êîÇçÏê¨Ç∑ÇÈ
 function alert(messageText) {
     WScript.Echo(messageText);
 }
+//----------------------------------------
 
+//----------------------------------------
+//fso Ç‡çÏê¨Ç∑ÇÈ
 var fso = new ActiveXObject("Scripting.FileSystemObject")
-
-
+//----------------------------------------
 
 test_textToFileListArray(WScript.ScriptFullName);
 test();
-
 
     </script>
 </job>

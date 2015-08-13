@@ -1,10 +1,20 @@
 /*------------------------------------------------------------
-OpenFilePath_Common.js
-----------
-OpenFilePath Common Module
-------------------------------------------------------------*/
+OpenFilePath
+----------------------------------------
+ModuleName:     OpenFilePath Common Module
+FileName:       OpenFilePath_Common.js
+Description:    OpenFilePath の共通モジュール
+----------------------------------------
+All Right Reserved:
+   Name:        Standard Software
+   URL:         http://standard-software.net/
+--------------------------------------
+Version:        2015/08/13
+// ------------------------------------------------------------*/
 
-//文字列から存在するファイルパスを抽出する関数
+
+//----------------------------------------
+//・文字列内から存在するファイル/フォルダのパスを抽出する
 function textToFileListArray(str) {
 
     //改行コード削除
@@ -75,7 +85,7 @@ function textToFileListArray(str) {
     return strArray;
 }
 
-//存在するpathを渡すとテストがOKになる
+//存在するpathを渡すとテストがOKになる関数
 function test_textToFileListArray(path) {
     //ファイルのテスト
     check(path, arrayToString(textToFileListArray(" "+ path + "\t")));
@@ -102,3 +112,5 @@ function test_textToFileListArray(path) {
 
     alert("test_textToFileListArray");
 }
+//----------------------------------------
+
