@@ -71,13 +71,15 @@ function main() {
 
         for (var i = 0 ; i <= fileListArray.length - 1 ; i++){
             var fileName = fileListArray[i];
-            alert(fileName);
+            //alert(fileName);
             if (fso.FileExists( fileName )) {
                 //ファイル開く
                 shellFileOpen(fileName, 1);
+                Sleep(1000);
             } else if (fso.FolderExists( fileName )) {
                 //フォルダを開く
                 shellFileOpen(fileName, 1);
+                Sleep(1000);
             } 
         }
 
